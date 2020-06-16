@@ -1,8 +1,11 @@
 const container = document.getElementById('container');
+const right = document.getElementById('acertos');
+const wrong = document.getElementById('erros');
+const total = document.getElementById('total');
 
 
-// var acertos = 0;
-// var erros = 0;
+var acertos = 0;
+var erros = 0;
 // var pontuaçãoFinal = 0;
 
 // var aproveitamento = 0;
@@ -13,6 +16,7 @@ var openCart = 0;
 var selectedCards = []; //Guarda a informação dos cartões que foram virados
 var selectedCardsName = []; // Guarda o nome escrito em cada cartão
 var qtdclick = 0; // Guarda a quantidade de cartões que foram virados por rodada/padrão 2
+var cartasViradas = [];
 
 //Opções para cartas. Nesse caso tem-se 
 const optionsCarts = [
@@ -28,7 +32,7 @@ const optionsCarts = [
     'deno',
     'spring',
     'sequelize',
-    'mongoose',
+    'mongodb',
     'typescript',
     'vue',
     'angular',
@@ -46,14 +50,7 @@ window.onload = function() {
             const carts = this.document.createElement('div');
 
             carts.className = 'cart' + i;
-            carts.style.width = '100px';
-            carts.style.height = '100px';
-            carts.style.backgroundColor = 'gainsboro';
-            carts.style.float = 'left';
-            carts.style.margin = '2px';
-
-            //Esconde o texto para o jogador não burlar
-            carts.style.fontSize = 0;
+            carts.id = 'cartas';
 
 
             if (i < 18) {
@@ -66,12 +63,25 @@ window.onload = function() {
 
                 //Verifica a quantidade cartas levantadas. Permitido no máximo duas viradas
                 //após isso acontece o reset das cartas viradas.
-                if (this.qtdclick == 2) {
-                    this.qtdclick = 0;
-                    this.qtdclick++;
+                if (this.qtdclick < 2) {
+                    
+                    this.qtdclick++; //vira a primeira
+                    cartasViradas.push(carts.className);// Guarda as duas cartas que estão viradas
+
                 } else {
-                    this.qtdclick++;
+                    this.qtdclick = 0; //ja foram viradas as duas
+                    this.qtdclick++; //vira a primeira
+
+                    for(var i = 0; i < cartasViradas.length; i++){
+                             document.querySelector(`.${cartasViradas[i]}`).style.backgroundImage = 'url(../img/tema-cartas.jpg)';
+                    }
+                    
+                    cartasViradas = [];
+                    cartasViradas.push(carts.className);// Guarda as duas cartas que estão viradas
+
                 }
+                carts.style.backgroundImage = `url(../img/${setImage(carts.innerText)})`;
+                
 
 
                 //Verifica se o mesmo cartão foi selecionado duas vezes seguidas
@@ -82,24 +92,34 @@ window.onload = function() {
                     //verifica se o jogador errou ou acertou a jogada
                     if (this.selectedCardsName.length == 1) {
                         if (this.selectedCardsName[0] == carts.innerText) {
-                            this.console.log('agora sim')
-                        } else {
-                            this.console.log('ta errado')
+                            carts.style.backgroundImage = `url(../img/${setImage(carts.innerText)})`;
+                            cartasViradas = [];
+
+                            acertos++;
                         }
+                        else {
+                            erros++;
+                         }
                     } else {
                         if ((this.selectedCardsName.length + 1) % 2 == 0) {
                             if ((this.selectedCardsName[this.selectedCardsName.length - 1] == carts.innerText)) {
-                                carts.style.backgroundColor = 'red';
-                            } else {
-                                this.console.log('ta errado')
+                                carts.style.backgroundImage = `url(../img/${setImage(carts.innerText)})`;
+                                cartasViradas = [];
+
+                                acertos++;
+                            } 
+                            else {
+                                 erros++;
                             }
                         }
                     }
                     this.selectedCardsName.push(carts.innerText);
-                    //this.console.log(this.selectedCardsName)
-
                     this.selectedCards.push(carts.className);
-                    //this.console.log(this.selectedCards)
+
+                    
+                    right.innerText = Number(acertos);
+                    wrong.innerText = Number(erros);
+                    total.innerText = Number(acertos)-Number(erros);
                 }
             });
 
@@ -126,4 +146,9 @@ function distrib() {
         }
     }
     return newOptionsCarts;
+}
+function setImage(name){
+
+    return `${name}.png`;
+
 }
