@@ -73,14 +73,14 @@ window.onload = function() {
                     this.qtdclick++; //vira a primeira
 
                     for(var i = 0; i < cartasViradas.length; i++){
-                             document.querySelector(`.${cartasViradas[i]}`).style.backgroundImage = 'url(../img/tema-cartas.jpg)';
+                             document.querySelector(`.${cartasViradas[i]}`).style.backgroundImage = 'url("../img/tema-cartas.jpg")';
                     }
                     
                     cartasViradas = [];
                     cartasViradas.push(carts.className);// Guarda as duas cartas que estão viradas
 
                 }
-                carts.style.backgroundImage = `url(../img/${setImage(carts.innerText)})`;
+                carts.style.backgroundImage = `url("../img/${setImage(carts.innerText)}")`.toLowerCase();
                 
 
 

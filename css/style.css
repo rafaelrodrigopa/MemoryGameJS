@@ -25,7 +25,7 @@ label{
     border: 1px solid gainsboro;
 }
 #cartas{
-    background-image: url(../img/tema-cartas.jpg);
+    background-image: url("../img/tema-cartas.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100px;
